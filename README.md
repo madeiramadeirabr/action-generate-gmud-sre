@@ -1,4 +1,4 @@
-![img](https://github.com/madeiramadeirabr/action-check-title-pr-pattern/blob/production/img/validate-the-title-structure-of-a-pull-request.svg)
+![img](https://github.com/madeiramadeirabr/action-generate-gmud-sre/blob/staging/img/action-generate-gmud-sre.svg)
 
 # action-generate-gmud-sre
 
