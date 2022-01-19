@@ -5,6 +5,7 @@
 ## Descrição:
 Action que valida:
 - Título de Pull Request
+
 - Captura com base no Título a Issue do Jira
 - Valida a Existência dessa Issue
 - Cria a GMUD no Jira
@@ -19,6 +20,7 @@ Irá compor a estrutura padrão que está sendo desenvolvida para o CI/CD da [Ma
 Repositório precisa ser *Público*
 
 ## Exemplos de uso (da action):
+
 
 ```yml
 name: CI
