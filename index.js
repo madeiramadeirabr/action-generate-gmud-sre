@@ -37,6 +37,7 @@ async function getDataJiraIssue(idIssue){
     }   
     
 }
+
 async function verifyJiraIssue(url, basic_auth){
     await axios.get(url,
         {
