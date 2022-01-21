@@ -11564,8 +11564,7 @@ async function createGMUD(){
         serviceDeskId: core.getInput('service-desk-id'),
         requestTypeId: core.getInput('request-type-id'),
         id_card_issue: keyJira,
-        service: [{"id" : core.getInput('service')}],
-        tecnical_approval: core.getInput('technical-approval'),
+        technical_approval: core.getInput('technical-approval'),
         business_approval: core.getInput('business-approval'),
         url:  core.getInput('url-pull-request')
     }
