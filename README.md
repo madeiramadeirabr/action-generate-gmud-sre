@@ -17,15 +17,15 @@ Irá compor a estrutura padrão que está sendo desenvolvida para o CI/CD da [Ma
 
 ## Requisitos:
 1. É necessário solicitar junto ao time de Segurança a criação das _"secrets"_ no repositório do GitHub:
-`TECHNICAL_APPROVAL`
-`BUSINESS_APPROVAL`
+- `TECHNICAL_APPROVAL`
+- `BUSINESS_APPROVAL`
 >  Estas “secrets” devem receber, respectivamente os e-mails do “Aprovador Técnico” e “Aprovador de Negócios” responsáveis pela GMUD que será criada.
 
 2. Utilizar as _“secrets”_, a nível de organização no GitHub:
-`GLOBALS_SRE_BASIC_AUTH_JIRA`
-`GLOBALS_SRE_APIKEY_JAZZ_GMUD`
-`GLOBALS_SRE_BASIC_AUTH_GITHUB`
-`GLOBALS_SRE_URL_SLIFER_GMUD`
+- `GLOBALS_SRE_BASIC_AUTH_JIRA`
+- `GLOBALS_SRE_APIKEY_JAZZ_GMUD`
+- `GLOBALS_SRE_BASIC_AUTH_GITHUB`
+- `GLOBALS_SRE_URL_SLIFER_GMUD`
 
 3. Título da "Pull Request" dentro do padrão esperado pela [`action-check-title-pr-pattern`](https://github.com/madeiramadeirabr/action-check-title-pr-pattern 'action-check-title-pr-pattern')
 
