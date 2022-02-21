@@ -11519,11 +11519,15 @@ async function run() {
 async function validateTitle(){
     let titlePR = github.context.payload.pull_request.title;
     let PRDefault = /[a-z]+\([A-Z]+-\d+\):.*/
+    let PRHotFix = /(hotfix)+\:.*/
     if (PRDefault.test(titlePR)) {
         keyJira = titlePR.split("(").pop().split(")")[0]
-       await getDataJiraIssue(keyJira)
+        await getDataJiraIssue(keyJira)
         console.log("Título da PR validada!")
-    }else{
+    }else if(PRHotFix.test(titlePR)){
+        console.log("Hotfix, não será criada a GMUD.")
+        return
+    } else {
         core.setFailed('ERRO. Título da Pull Request não está no padrão.\ntipoPR(IDJIRA): Descrição.')
     }
     
@@ -11542,6 +11546,7 @@ async function getDataJiraIssue(idIssue){
     }   
     
 }
+
 async function verifyJiraIssue(url, basic_auth){
     await axios.get(url,
         {
@@ -11564,7 +11569,6 @@ async function createGMUD(){
         serviceDeskId: core.getInput('service-desk-id'),
         requestTypeId: core.getInput('request-type-id'),
         id_card_issue: keyJira,
-        service: [{"id" : core.getInput('service')}],
         technical_approval: core.getInput('technical-approval'),
         business_approval: core.getInput('business-approval'),
         url:  core.getInput('url-pull-request')
