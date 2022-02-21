@@ -14,11 +14,15 @@ async function run() {
 async function validateTitle(){
     let titlePR = github.context.payload.pull_request.title;
     let PRDefault = /[a-z]+\([A-Z]+-\d+\):.*/
+    let PRHotFix = /(hotfix)+\:.*/
     if (PRDefault.test(titlePR)) {
         keyJira = titlePR.split("(").pop().split(")")[0]
-       await getDataJiraIssue(keyJira)
+        await getDataJiraIssue(keyJira)
         console.log("Título da PR validada!")
-    }else{
+    }else if(PRHotFix.test(titlePR)){
+        console.log("Hotfix, não será criada a GMUD.")
+        return
+    } else {
         core.setFailed('ERRO. Título da Pull Request não está no padrão.\ntipoPR(IDJIRA): Descrição.')
     }
     

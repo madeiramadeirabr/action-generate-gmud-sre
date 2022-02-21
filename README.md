@@ -13,7 +13,7 @@ Action que valida:
 Irá compor a estrutura padrão que está sendo desenvolvida para o CI/CD da [MadeiraMadeira](https://github.com/madeiramadeirabr 'MadeiraMadeira'), sendo aplicável a todos os Projetos Novos (e "antigos").
 
 ## Squad:
-[SRE-Architecture-Carpentry](https://github.com/orgs/madeiramadeirabr/teams/squad-sre-architecture-carpentry 'SRE-Architecture-Carpentry')
+[Team-Platform-Services](https://github.com/orgs/madeiramadeirabr/teams/team-platform-services 'Team-Platform-Services')
 
 ## Requisitos:
 1. É necessário solicitar junto ao time de Segurança a criação das _"secrets"_ no repositório do GitHub:
