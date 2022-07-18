@@ -14,7 +14,7 @@ async function run() {
 async function validateTitle(){
     let titlePR = github.context.payload.pull_request.title;
     let PRDefault = /[a-z]+\([A-Z|0-9]+-\d+\):.*/
-    let PRHotFix = /(hotfix)+\:.*/
+    let PRHotFix = /\(hotfix\)+\:.*/
     if (PRDefault.test(titlePR)) {
         keyJira = titlePR.split("(").pop().split(")")[0]
         await getDataJiraIssue(keyJira)
