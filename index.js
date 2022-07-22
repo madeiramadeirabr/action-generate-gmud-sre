@@ -83,8 +83,8 @@ async function createGMUD(){
             console.log("A GMUD foi criada!")
         })
     } catch (error) {
-        console.log(error)
         core.setFailed("Erro ao criar GMUD")
+        core.setFailed(error.response.data.message)
     }
    
 }
