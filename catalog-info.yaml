@@ -3,16 +3,14 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: action-generate-gmud-sre
-  description: |
-    Github Action que faz a abertura de um registro de mudança(GMUD) no Service Desk.
+  description: Github Action que faz a abertura de um registro de mudança (GMUD) no Service Desk.
   annotations:
     github.com/project-slug: madeiramadeirabr/action-generate-gmud-sre
     sonarqube.org/project-key: madeiramadeirabr/action-generate-gmud-sre
-    backstage.io/techdocs-ref: dir:.
   tags:
   - javascript
   - github-action
 spec:
   type: library
   lifecycle: production
-  owner: team-platform-services
+  owner: team-platform-engineering-admin
