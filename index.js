@@ -4,6 +4,9 @@ const axios = require('axios')
 var keyJira
 
 async function run() {
+    if(isBot(github))
+        return
+
     try {
         await validateTitle()
     } catch (e) {
@@ -13,8 +16,8 @@ async function run() {
 
 async function validateTitle(){
     let titlePR = github.context.payload.pull_request.title;
-    let PRDefault = /[a-z]+\([A-Z]+-\d+\):.*/
-    let PRHotFix = /(hotfix)+\:.*/
+    let PRDefault = /[a-z]+\([A-Z|0-9]+-\d+\):.*/
+    let PRHotFix = /\(hotfix\)+\:.*/
     if (PRDefault.test(titlePR)) {
         keyJira = titlePR.split("(").pop().split(")")[0]
         await getDataJiraIssue(keyJira)
@@ -83,10 +86,41 @@ async function createGMUD(){
             console.log("A GMUD foi criada!")
         })
     } catch (error) {
-        console.log(error)
         core.setFailed("Erro ao criar GMUD")
+        core.setFailed(error.response.data.message)
     }
    
+}
+
+function isBot(github){
+    console.log(validateObjectLoginsender(github))
+    if(!validateObjectLoginsender(github)){
+        return false
+    }
+
+    const loginSender = github.context.payload.sender.login
+
+    if (loginSender.includes("[bot]")){
+        console.log(`Essa ação foi executada pelo bot ${loginSender} e não irá gerar GMUD!`)
+        return true
+    }
+    
+}
+
+function validateObjectLoginsender(github){
+    if (!github.hasOwnProperty('context'))
+        return false
+
+    if (!github.context.hasOwnProperty('payload'))
+        return false
+
+    if (!github.context.payload.hasOwnProperty('sender'))
+        return false
+        
+    if (!github.context.payload.sender.hasOwnProperty('login'))
+        return false
+
+    return true
 }
 
 

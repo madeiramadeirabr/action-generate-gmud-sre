@@ -31,6 +31,9 @@ inputs:
   url-pull-request:
     description: "url pull request"
     required: true
+  url-slifer-gmud:
+    description: "url create servicedesk"
+    required: true
 outputs:
   result:
     description: "finished process"
