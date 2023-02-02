@@ -12019,7 +12019,6 @@ async function createGMUD(){
 }
 
 function isBot(github){
-    console.log(validateObjectLoginsender(github))
     if(!validateObjectLoginsender(github)){
         return false
     }
