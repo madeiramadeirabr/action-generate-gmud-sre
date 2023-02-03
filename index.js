@@ -136,30 +136,12 @@ async function deleteRunById(runId){
         repo: github.context.payload.repository.name,
         run_id: runId
     }).then((res) => {
-        console.log("Run deletado com sucesso!")
+        console.log(`Run ${runId} deletado com sucesso!`)
     }).catch((err) => {
         console.log("Erro ao deletar run")
         console.log(err.message)
     })
 }
-
-async function CancelRunById(runId){
-    
-    let authGithub = core.getInput('auth-github').replace("Bearer ", "")
-    const octokit = new Octokit({auth: authGithub})
-    
-    await octokit.request('POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel', {
-        owner: github.context.payload.repository.owner.name,
-        repo: github.context.payload.repository.name,
-        run_id: runId
-      }).then((res) => {
-        console.log("Run cancelado com sucesso!")
-    }).catch((err) => {
-        console.log("Erro ao cancelar run")
-        console.log(err.message)
-    })
-}
-
 
 async function getRunAll(runId){
     
@@ -170,30 +152,38 @@ async function getRunAll(runId){
         owner: github.context.payload.repository.owner.name,
         repo: github.context.payload.repository.name,
     }).then((res) => {
-
         let workflow_runs = res.data.workflow_runs
-        workflow_runs.forEach((workflow_run)=>{
-            if(isRunDuplicate(runId, workflow_run)){
-                deleteRunById(workflow_run.id)
-                return true
+        for(let indice in workflow_runs){
+            if(isRunDuplicate(runId, workflow_runs[indice])){
+                deleteRunById(workflow_runs[indice].id)
+                break
             }
-        })
+        }
     })
 }
 
 function isRunDuplicate(runId, workflow_runs){
-    if(!workflow_runs.id != runId)
-        return false
-
-    if(!workflow_runs.display_title == github.context.pull_request.title)
-        return false 
-
-    if(!workflow_runs.pull_requests[0].number == github.context.payload.number) 
-        return false
-
     if(!workflow_runs.actor.login.includes("[bot]"))
         return false
 
+    if(workflow_runs.id == runId)
+        return false
+    
+    if(!workflow_runs.hasOwnProperty("pull_requests"))
+        return false
+    
+    if(workflow_runs.pull_requests.length == 0)
+        return false
+    
+    if(!workflow_runs.pull_requests[0].hasOwnProperty("number"))
+        return false
+    
+    if(workflow_runs.display_title.trim() != github.context.payload.pull_request.title.trim())
+        return false
+    
+    if(workflow_runs.pull_requests[0].number != github.context.payload.number) 
+        return false
+    
     return true
 }
 
