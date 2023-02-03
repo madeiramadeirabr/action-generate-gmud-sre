@@ -1,11 +1,15 @@
+const { Octokit } = require("@octokit/core")
 const core = require('@actions/core');
 const github = require('@actions/github');
 const axios = require('axios')
 var keyJira
 
 async function run() {
-    if(isBot(github))
+    if(isBot(github)){
+        const runId = github.context.runId
+        await deleteRunById(runId)
         return
+    }
 
     try {
         await validateTitle()
@@ -120,6 +124,23 @@ function validateObjectLoginsender(github){
         return false
 
     return true
+}
+
+async function deleteRunById(runId){
+    
+    let basic_auth = core.getInput('basic-auth')
+    const octokit = new Octokit({auth: basic_auth})
+    
+    await octokit.request('DELETE /repos/{owner}/{repo}/actions/runs/{run_id}', {
+        owner: github.context.payload.repository.owner.name,
+        repo: github.context.payload.repository.name,
+        run_id: runId
+    }).then((res) => {
+        console.log("Run deletado com sucesso!")
+    }).catch((err) => {
+        console.log("Erro ao deletar run")
+        console.log(err.message)
+    })
 }
 
 

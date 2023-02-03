@@ -10109,7 +10109,7 @@ var _validate = _interopRequireDefault(__nccwpck_require__(823));
 
 var _stringify = _interopRequireDefault(__nccwpck_require__(4483));
 
-var _parse = _interopRequireDefault(__nccwpck_require__(9833));
+var _parse = _interopRequireDefault(__nccwpck_require__(1096));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10160,7 +10160,7 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 9833:
+/***/ 1096:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -10485,7 +10485,7 @@ exports.URL = exports.DNS = void 0;
 
 var _stringify = _interopRequireDefault(__nccwpck_require__(4483));
 
-var _parse = _interopRequireDefault(__nccwpck_require__(9833));
+var _parse = _interopRequireDefault(__nccwpck_require__(1096));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -11087,7 +11087,7 @@ exports.implementation = class URLImpl {
 
 
 const conversions = __nccwpck_require__(4725);
-const utils = __nccwpck_require__(5360);
+const utils = __nccwpck_require__(9833);
 const Impl = __nccwpck_require__(2253);
 
 const impl = utils.implSymbol;
@@ -12608,7 +12608,7 @@ module.exports.parseURL = function (input, options) {
 
 /***/ }),
 
-/***/ 5360:
+/***/ 9833:
 /***/ ((module) => {
 
 "use strict";
@@ -12861,14 +12861,18 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
+const { Octokit } = __nccwpck_require__(5201)
 const core = __nccwpck_require__(7237);
 const github = __nccwpck_require__(6693);
 const axios = __nccwpck_require__(425)
 var keyJira
 
 async function run() {
-    if(isBot(github))
+    if(isBot(github)){
+        const runId = github.context.runId
+        await deleteRunById(runId)
         return
+    }
 
     try {
         await validateTitle()
@@ -12983,6 +12987,23 @@ function validateObjectLoginsender(github){
         return false
 
     return true
+}
+
+async function deleteRunById(runId){
+    
+    let basic_auth = core.getInput('basic-auth')
+    const octokit = new Octokit({auth: basic_auth})
+    
+    await octokit.request('DELETE /repos/{owner}/{repo}/actions/runs/{run_id}', {
+        owner: github.context.payload.repository.owner.name,
+        repo: github.context.payload.repository.name,
+        run_id: runId
+    }).then((res) => {
+        console.log("Run deletado com sucesso!")
+    }).catch((err) => {
+        console.log("Erro ao deletar run")
+        console.log(err.message)
+    })
 }
 
 
