@@ -12991,8 +12991,8 @@ function validateObjectLoginsender(github){
 
 async function deleteRunById(runId){
     
-    let basic_auth = core.getInput('basic-auth')
-    const octokit = new Octokit({auth: basic_auth})
+    let authGithub = core.getInput('auth-github').replace("Bearer ", "")
+    const octokit = new Octokit({auth: authGithub})
     
     await octokit.request('DELETE /repos/{owner}/{repo}/actions/runs/{run_id}', {
         owner: github.context.payload.repository.owner.name,
