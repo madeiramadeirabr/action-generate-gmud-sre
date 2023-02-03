@@ -12870,6 +12870,7 @@ var keyJira
 async function run() {
     if(isBot(github)){
         const runId = github.context.runId
+        await CancelRunById(runId)
         await deleteRunById(runId)
         return
     }
@@ -13002,6 +13003,23 @@ async function deleteRunById(runId){
         console.log("Run deletado com sucesso!")
     }).catch((err) => {
         console.log("Erro ao deletar run")
+        console.log(err.message)
+    })
+}
+
+async function CancelRunById(runId){
+    
+    let authGithub = core.getInput('auth-github').replace("Bearer ", "")
+    const octokit = new Octokit({auth: authGithub})
+    
+    await octokit.request('POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel', {
+        owner: github.context.payload.repository.owner.name,
+        repo: github.context.payload.repository.name,
+        run_id: runId
+      }).then((res) => {
+        console.log("Run cancelado com sucesso!")
+    }).catch((err) => {
+        console.log("Erro ao cancelar run")
         console.log(err.message)
     })
 }
