@@ -12868,14 +12868,13 @@ const axios = __nccwpck_require__(425)
 var keyJira
 
 async function run() {
-    if(isBot(github)){
-        const runId = github.context.runId
-        await CancelRunById(runId)
-        await deleteRunById(runId)
+    if(isBot(github)){       
         return
     }
 
     try {
+        const runId = github.context.runId
+        await getRunAll(runId)
         await validateTitle()
     } catch (e) {
         core.setFailed(`Essa ação só será executada em uma Pull Request.\nERRO: ${e}.`)
@@ -13024,6 +13023,42 @@ async function CancelRunById(runId){
     })
 }
 
+
+async function getRunAll(runId){
+    
+    let authGithub = core.getInput('auth-github').replace("Bearer ", "")
+    const octokit = new Octokit({auth: authGithub})
+
+    await octokit.request('GET /repos/{owner}/{repo}/actions/runs', {
+        owner: github.context.payload.repository.owner.name,
+        repo: github.context.payload.repository.name,
+    }).then((res) => {
+
+        let workflow_runs = res.data.workflow_runs
+        workflow_runs.forEach((workflow_run)=>{
+            if(isRunDuplicate(runId, workflow_run)){
+                deleteRunById(workflow_run.id)
+                return true
+            }
+        })
+    })
+}
+
+function isRunDuplicate(runId, workflow_runs){
+    if(!workflow_runs.id != runId)
+        return false
+
+    if(!workflow_runs.display_title == github.context.pull_request.title)
+        return false 
+
+    if(!workflow_runs.pull_requests[0].number == github.context.payload.number) 
+        return false
+
+    if(!workflow_runs.actor.login.includes("[bot]"))
+        return false
+
+    return true
+}
 
 run()
 })();
