@@ -100,7 +100,7 @@ function isBot(github){
     const loginSender = github.context.payload.sender.login
 
     if (loginSender.includes("[bot]")){
-        console.log(`Essa ação foi executada pelo bot ${loginSender} e não irá gerar GMUD!`)
+        core.setFailed(`Essa ação foi executada pelo bot ${loginSender} e não irá gerar GMUD!`)
         return true
     }
     
