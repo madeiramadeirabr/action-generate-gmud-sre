@@ -19,6 +19,7 @@ async function run() {
 }
 
 async function validateTitle(){
+    console.log("validateTitle")
     let titlePR = github.context.payload.pull_request.title;
     let PRDefault = /[a-z]+\([A-Z|0-9]+-\d+\):.*/
     let PRHotFix = /\(hotfix\)+\:.*/
@@ -144,10 +145,11 @@ async function deleteRunById(runId){
 }
 
 async function getRunAll(runId){
-    
+    console.log("getRunAll")
+    console.log("auth: ", core.getInput('auth-github'))
     let authGithub = core.getInput('auth-github').replace("Bearer ", "")
     const octokit = new Octokit({auth: authGithub})
-
+    console.log("octokit")
     await octokit.request('GET /repos/{owner}/{repo}/actions/runs', {
         owner: github.context.payload.repository.owner.name,
         repo: github.context.payload.repository.name,
@@ -159,6 +161,9 @@ async function getRunAll(runId){
                 break
             }
         }
+    }).catch((error)=>{
+        console.log("Erro ao buscar run: ", error)
+        console.log(error)
     })
 }
 
