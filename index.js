@@ -149,7 +149,10 @@ async function getRunAll(runId){
     console.log("auth: ", core.getInput('auth-github'))
     let authGithub = core.getInput('auth-github').replace("Bearer ", "")
     const octokit = new Octokit({auth: authGithub})
-    console.log("octokit")
+    console.log("owner")
+    console.log(github.context.payload.repository.owner)
+    console.log("name")
+    console.log(github.context.payload.repository.owner.name)
     await octokit.request('GET /repos/{owner}/{repo}/actions/runs', {
         owner: github.context.payload.repository.owner.name,
         repo: github.context.payload.repository.name,
