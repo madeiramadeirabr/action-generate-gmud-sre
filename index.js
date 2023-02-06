@@ -1,13 +1,17 @@
+const { Octokit } = require("@octokit/core")
 const core = require('@actions/core');
 const github = require('@actions/github');
 const axios = require('axios')
 var keyJira
 
 async function run() {
-    if(isBot(github))
+    if(isBot(github)){       
         return
+    }
 
     try {
+        const runId = github.context.runId
+        await getRunAll(runId)
         await validateTitle()
     } catch (e) {
         core.setFailed(`Essa ação só será executada em uma Pull Request.\nERRO: ${e}.`)
@@ -100,7 +104,7 @@ function isBot(github){
     const loginSender = github.context.payload.sender.login
 
     if (loginSender.includes("[bot]")){
-        console.log(`Essa ação foi executada pelo bot ${loginSender} e não irá gerar GMUD!`)
+        core.setFailed(`Essa ação foi executada pelo bot ${loginSender} e não irá gerar GMUD!`)
         return true
     }
     
@@ -122,5 +126,67 @@ function validateObjectLoginsender(github){
     return true
 }
 
+async function deleteRunById(runId){
+    
+    let authGithub = core.getInput('auth-github').replace("Bearer ", "")
+    const octokit = new Octokit({auth: authGithub})
+    
+    await octokit.request('DELETE /repos/{owner}/{repo}/actions/runs/{run_id}', {
+        owner: github.context.payload.repository.owner.login,
+        repo: github.context.payload.repository.name,
+        run_id: runId
+    }).then((res) => {
+        console.log(`Run ${runId} deletado com sucesso!`)
+    }).catch((err) => {
+        console.log("Erro ao deletar run")
+        console.log(err.message)
+    })
+}
+
+async function getRunAll(runId){
+    
+    let authGithub = core.getInput('auth-github').replace("Bearer ", "")
+    const octokit = new Octokit({auth: authGithub})
+    
+    await octokit.request('GET /repos/{owner}/{repo}/actions/runs', {
+        owner: github.context.payload.repository.owner.login,
+        repo: github.context.payload.repository.name,
+    }).then((res) => {
+        let workflow_runs = res.data.workflow_runs
+        for(let indice in workflow_runs){
+            if(isRunDuplicate(runId, workflow_runs[indice])){
+                deleteRunById(workflow_runs[indice].id)
+                break
+            }
+        }
+    }).catch((error)=>{
+        console.log("Erro ao buscar run: ", error)
+    })
+}
+
+function isRunDuplicate(runId, workflow_runs){
+    if(!workflow_runs.actor.login.includes("[bot]"))
+        return false
+
+    if(workflow_runs.id == runId)
+        return false
+    
+    if(!workflow_runs.hasOwnProperty("pull_requests"))
+        return false
+    
+    if(workflow_runs.pull_requests.length == 0)
+        return false
+    
+    if(!workflow_runs.pull_requests[0].hasOwnProperty("number"))
+        return false
+    
+    if(workflow_runs.display_title.trim() != github.context.payload.pull_request.title.trim())
+        return false
+    
+    if(workflow_runs.pull_requests[0].number != github.context.payload.number) 
+        return false
+    
+    return true
+}
 
 run()
