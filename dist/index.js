@@ -12995,7 +12995,7 @@ async function deleteRunById(runId){
     const octokit = new Octokit({auth: authGithub})
     
     await octokit.request('DELETE /repos/{owner}/{repo}/actions/runs/{run_id}', {
-        owner: github.context.payload.repository.owner.name,
+        owner: github.context.payload.repository.owner.login,
         repo: github.context.payload.repository.name,
         run_id: runId
     }).then((res) => {
