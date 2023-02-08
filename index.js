@@ -6,7 +6,7 @@ import ActionController from './src/controllers/actionController.js';
 async function run() {
     try {       
         console.log('print: ')
-        console.log(github)
+        console.log(github.context)
         const actionController = new ActionController(github)
         await actionController.createGMUD()
     } catch (e) {
