@@ -14021,16 +14021,16 @@ class Validate {
     }
 
     validateObjectLoginsender(){
-        if (!this.github.hasOwnProperty('context'))
+        if (!Object.hasOwnProperty.bind(this.github)('context'))
             return false
     
-        if (!this.github.context.hasOwnProperty('payload'))
+        if (!Object.hasOwnProperty.bind(this.github.context)('payload'))
             return false
     
-        if (!this.github.context.payload.hasOwnProperty('sender'))
+        if (!Object.hasOwnProperty.bind(this.github.context.payload)('sender'))
             return false
             
-        if (!this.github.context.payload.sender.hasOwnProperty('login'))
+        if (!Object.hasOwnProperty.bind(this.github.context.payload.sender)('login'))
             return false
     
         return true
@@ -14058,13 +14058,13 @@ class Validate {
         if(workflow_runs.id == runId)
             return false
         
-        if(!workflow_runs.hasOwnProperty("pull_requests"))
+        if(!Object.hasOwnProperty.bind(workflow_runs)("pull_requests"))
             return false
 
         if(workflow_runs.pull_requests.length == 0)
             return false
         
-        if(!workflow_runs.pull_requests[0].hasOwnProperty("number"))
+        if(!Object.hasOwnProperty.bind(workflow_runs.pull_requests[0])("number"))
             return false
         
         if(workflow_runs.display_title.trim() != this.github.context.payload.pull_request.title.trim())
@@ -14077,47 +14077,47 @@ class Validate {
     }
 
     isGithubValid(github){
-        if(!github.hasOwnProperty('context')){
+        if(!Object.hasOwnProperty.bind(github)('context')){
             (0,lib_core.setFailed)('A propriedade `context` não foi encontrada!')
             return false
         }
         
-        if(!github.context.hasOwnProperty('payload')){
+        if(!Object.hasOwnProperty.bind(github.context)('payload')){
             (0,lib_core.setFailed)('A propriedade `payload` não foi encontrada!')
             return false
         }
         
-        if(!github.context.payload.hasOwnProperty('repository')){
+        if(!Object.hasOwnProperty.bind(github.context.payload)('repository')){
             (0,lib_core.setFailed)('A propriedade `repository` não foi encontrada!')
             return false
         }
         
-        if(!github.context.payload.repository.hasOwnProperty('owner')){
+        if(!Object.hasOwnProperty.bind(github.context.payload.repository)('owner')){
             (0,lib_core.setFailed)('A propriedade `owner` não foi encontrada!')
             return false
         }
         
-        if(!github.context.payload.repository.hasOwnProperty('name')){
+        if(!Object.hasOwnProperty.bind(github.context.payload.repository)('name')){
             (0,lib_core.setFailed)('A propriedade `name` não foi encontrada!')
             return false
         }
         
-        if(!github.context.payload.repository.owner.hasOwnProperty('login')){
+        if(!Object.hasOwnProperty.bind(github.context.payload.repository.owner)('login')){
             (0,lib_core.setFailed)('A propriedade `login` não foi encontrada!')
             return false
         }
         
-        if(!github.context.payload.pull_request.hasOwnProperty('head')){
+        if(!Object.hasOwnProperty.bind(github.context.payload.pull_request)('head')){
             (0,lib_core.setFailed)('A propriedade `head` não foi encontrada!')
             return false
         }
         
-        if(!github.context.payload.pull_request.head.hasOwnProperty('repo')){
+        if(!Object.hasOwnProperty.bind(github.context.payload.pull_request.head)('repo')){
             (0,lib_core.setFailed)('A propriedade `repo` não foi encontrada!')
             return false
         }
         
-        if(!github.context.payload.pull_request.head.repo.hasOwnProperty('owner')){
+        if(!Object.hasOwnProperty.bind(github.context.payload.pull_request.head.repo)('owner')){
             (0,lib_core.setFailed)('A propriedade `owner` não foi encontrada!')
             return false
         }
