@@ -14269,7 +14269,7 @@ let jiraDTO ={
     technicalApproval: lib_core.getInput('technical-approval'),
     businessApproval: lib_core.getInput('business-approval'),
     urlPullRequest:  lib_core.getInput('url-pull-request'),
-    urlServiceDesk:  lib_core.getInput('url-service-desk'),
+    urlServiceDesk:  lib_core.getInput('url-slifer-gmud'),
     apikey: lib_core.getInput('api-key'),
     authGithub: lib_core.getInput('auth-github')
 }
