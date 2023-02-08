@@ -3,6 +3,7 @@ import Validate  from '../services/validate.js';
 import Jira from'../services/jira.js';
 import GithubService from'../services/github.js';
 import jiraDTO from '../dto/jiraDTO.js';
+import { setFailed } from '@actions/core';
 
 export default class ActionController{
 
@@ -13,8 +14,9 @@ export default class ActionController{
         
         let validate = new Validate(this.github)
 
-        if(validate.isBot())      
+        if(validate.isBot()){
             return
+        }
        
         let authGithub = jiraDTO.authGithub
         let githubService = new GithubService(authGithub, this.github)
@@ -34,7 +36,7 @@ export default class ActionController{
             console.log("Hotfix, não será criada a GMUD.")
             return
         } else {
-            core.setFailed('ERRO. Título da Pull Request não está no padrão.\ntipoPR(IDJIRA): Descrição.')
+            setFailed('ERRO. Título da Pull Request não está no padrão.\ntipoPR(IDJIRA): Descrição.')
         }
         
     }

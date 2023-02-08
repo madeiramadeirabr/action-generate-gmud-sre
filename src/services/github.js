@@ -15,7 +15,7 @@ export default class GithubService {
             owner: this.github.context.payload.repository.owner.login,
             repo: this.github.context.payload.repository.name,
             run_id: runId
-        }).then((res) => {
+        }).then(() => {
             console.log(`Run ${runId} deletado com sucesso!`)
         }).catch((err) => {
             console.log("Erro ao deletar run")

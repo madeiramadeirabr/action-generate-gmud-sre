@@ -17,17 +17,21 @@ export default class Validate {
     }
 
     validateObjectLoginsender(){
-        if (!Object.hasOwnProperty.bind(this.github)('context'))
+        if (!Object.hasOwnProperty.bind(this.github)('context')){
             return false
+        }
     
-        if (!Object.hasOwnProperty.bind(this.github.context)('payload'))
+        if (!Object.hasOwnProperty.bind(this.github.context)('payload')){
             return false
+        }
     
-        if (!Object.hasOwnProperty.bind(this.github.context.payload)('sender'))
+        if (!Object.hasOwnProperty.bind(this.github.context.payload)('sender')){
             return false
+        }
             
-        if (!Object.hasOwnProperty.bind(this.github.context.payload.sender)('login'))
+        if (!Object.hasOwnProperty.bind(this.github.context.payload.sender)('login')){
             return false
+        }
     
         return true
     }
@@ -48,26 +52,33 @@ export default class Validate {
 
     isRunDuplicate(runId, workflow_runs){
         
-        if(!workflow_runs.actor.login.includes("[bot]"))
+        if(!workflow_runs.actor.login.includes("[bot]")){
             return false
+        }
         
-        if(workflow_runs.id == runId)
+        if(workflow_runs.id == runId){
             return false
+        }
         
-        if(!Object.hasOwnProperty.bind(workflow_runs)("pull_requests"))
+        if(!Object.hasOwnProperty.bind(workflow_runs)("pull_requests")){
             return false
+        }
 
-        if(workflow_runs.pull_requests.length == 0)
+        if(workflow_runs.pull_requests.length == 0){
             return false
+        }
         
-        if(!Object.hasOwnProperty.bind(workflow_runs.pull_requests[0])("number"))
+        if(!Object.hasOwnProperty.bind(workflow_runs.pull_requests[0])("number")){
             return false
+        }
         
-        if(workflow_runs.display_title.trim() != this.github.context.payload.pull_request.title.trim())
+        if(workflow_runs.display_title.trim() != this.github.context.payload.pull_request.title.trim()){
             return false
+        }
         
-        if(workflow_runs.pull_requests[0].number != this.github.context.payload.number) 
+        if(workflow_runs.pull_requests[0].number != this.github.context.payload.number){
             return false
+        }
         
         return true
     }
