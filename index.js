@@ -1,5 +1,5 @@
 "use strict"
-import github from '@actions/github';
+import * as github from '@actions/github'
 import { setFailed } from '@actions/core';
 import ActionController from './src/controllers/actionController.js';
 
