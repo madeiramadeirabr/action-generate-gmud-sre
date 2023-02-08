@@ -12621,12 +12621,12 @@ class GithubService {
     constructor(authGithub, github){
         this.authGithub = authGithub.replace("Bearer ", "")
         this.github = github
+        this.octokit = new dist_node/* Octokit */.v({ auth: this.authGithub })
     }
     
     async deleteRunById(runId){
-        
-        const octokit = new dist_node/* Octokit */.v({auth: this.authGithub})
-        await octokit.request('DELETE /repos/{owner}/{repo}/actions/runs/{run_id}', {
+
+        await this.octokit.request('DELETE /repos/{owner}/{repo}/actions/runs/{run_id}', {
             owner: this.github.context.payload.repository.owner.login,
             repo: this.github.context.payload.repository.name,
             run_id: runId
@@ -12639,10 +12639,10 @@ class GithubService {
     }
 
     async getRunAll(runId){
-        const octokit = new dist_node/* Octokit */.v({auth: this.authGithub})
+        
         let validate = new Validate(this.github)
         
-        await octokit.request('GET /repos/{owner}/{repo}/actions/runs', {
+        await this.octokit.request('GET /repos/{owner}/{repo}/actions/runs', {
             owner: this.github.context.payload.repository.owner.login,
             repo: this.github.context.payload.repository.name,
         }).then((res) => {
@@ -12723,7 +12723,6 @@ class ActionController{
 ;// CONCATENATED MODULE: ./index.js
 
 const index_github = require('@actions/github');
-
 
 
 
