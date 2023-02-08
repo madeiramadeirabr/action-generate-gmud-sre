@@ -13997,8 +13997,8 @@ var __webpack_exports__ = {};
 (() => {
 
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
-var lib_github = __nccwpck_require__(6693);
-var github_namespaceObject = /*#__PURE__*/__nccwpck_require__.t(lib_github, 2);
+var github = __nccwpck_require__(6693);
+var github_namespaceObject = /*#__PURE__*/__nccwpck_require__.t(github, 2);
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
 var lib_core = __nccwpck_require__(7237);
 ;// CONCATENATED MODULE: ./src/services/validate.js
@@ -14289,17 +14289,17 @@ class ActionController{
         this.github = github
     }
     async createGMUD(){
-        let validate = new Validate(github)
+        
+        let validate = new Validate(this.github)
 
         if(validate.isBot())      
             return
-
+       
         let authGithub = dto_jiraDTO.authGithub
         let githubService = new GithubService(authGithub, this.github)
 
         const runId = this.github.context.runId
         await githubService.getRunAll(runId)
-
         let titlePR = this.github.context.payload.pull_request.title
         
         if (validate.isPRDefault(titlePR)) {
@@ -14325,9 +14325,7 @@ class ActionController{
 
 
 async function run() {
-    try {       
-        console.log('print: ')
-        console.log(lib_github.context)
+    try {
         const actionController = new ActionController(github_namespaceObject)
         await actionController.createGMUD()
     } catch (e) {
