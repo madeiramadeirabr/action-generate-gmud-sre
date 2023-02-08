@@ -14326,7 +14326,8 @@ class ActionController{
 
 async function run() {
     try {       
-        console.log('print: ' + github_namespaceObject)
+        console.log('print: ')
+        console.log(github_namespaceObject)
         const actionController = new ActionController(github_namespaceObject)
         await actionController.createGMUD()
     } catch (e) {
