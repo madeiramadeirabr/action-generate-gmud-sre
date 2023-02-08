@@ -14000,7 +14000,7 @@ var __webpack_exports__ = {};
 var github = __nccwpck_require__(6693);
 var github_namespaceObject = /*#__PURE__*/__nccwpck_require__.t(github, 2);
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var lib_core = __nccwpck_require__(7237);
+var core = __nccwpck_require__(7237);
 ;// CONCATENATED MODULE: ./src/services/validate.js
 
 
@@ -14021,17 +14021,21 @@ class Validate {
     }
 
     validateObjectLoginsender(){
-        if (!Object.hasOwnProperty.bind(this.github)('context'))
+        if (!Object.hasOwnProperty.bind(this.github)('context')){
             return false
+        }
     
-        if (!Object.hasOwnProperty.bind(this.github.context)('payload'))
+        if (!Object.hasOwnProperty.bind(this.github.context)('payload')){
             return false
+        }
     
-        if (!Object.hasOwnProperty.bind(this.github.context.payload)('sender'))
+        if (!Object.hasOwnProperty.bind(this.github.context.payload)('sender')){
             return false
+        }
             
-        if (!Object.hasOwnProperty.bind(this.github.context.payload.sender)('login'))
+        if (!Object.hasOwnProperty.bind(this.github.context.payload.sender)('login')){
             return false
+        }
     
         return true
     }
@@ -14044,7 +14048,7 @@ class Validate {
         const loginSender = this.github.context.payload.sender.login
     
         if (loginSender.includes("[bot]")){
-            (0,lib_core.setFailed)(`Essa ação foi executada pelo bot ${loginSender} e não irá gerar GMUD!`)
+            (0,core.setFailed)(`Essa ação foi executada pelo bot ${loginSender} e não irá gerar GMUD!`)
             return true
         }
         
@@ -14052,73 +14056,80 @@ class Validate {
 
     isRunDuplicate(runId, workflow_runs){
         
-        if(!workflow_runs.actor.login.includes("[bot]"))
+        if(!workflow_runs.actor.login.includes("[bot]")){
             return false
+        }
         
-        if(workflow_runs.id == runId)
+        if(workflow_runs.id == runId){
             return false
+        }
         
-        if(!Object.hasOwnProperty.bind(workflow_runs)("pull_requests"))
+        if(!Object.hasOwnProperty.bind(workflow_runs)("pull_requests")){
             return false
+        }
 
-        if(workflow_runs.pull_requests.length == 0)
+        if(workflow_runs.pull_requests.length == 0){
             return false
+        }
         
-        if(!Object.hasOwnProperty.bind(workflow_runs.pull_requests[0])("number"))
+        if(!Object.hasOwnProperty.bind(workflow_runs.pull_requests[0])("number")){
             return false
+        }
         
-        if(workflow_runs.display_title.trim() != this.github.context.payload.pull_request.title.trim())
+        if(workflow_runs.display_title.trim() != this.github.context.payload.pull_request.title.trim()){
             return false
+        }
         
-        if(workflow_runs.pull_requests[0].number != this.github.context.payload.number) 
+        if(workflow_runs.pull_requests[0].number != this.github.context.payload.number){
             return false
+        }
         
         return true
     }
 
     isGithubValid(github){
         if(!Object.hasOwnProperty.bind(github)('context')){
-            (0,lib_core.setFailed)('A propriedade `context` não foi encontrada!')
+            (0,core.setFailed)('A propriedade `context` não foi encontrada!')
             return false
         }
         
         if(!Object.hasOwnProperty.bind(github.context)('payload')){
-            (0,lib_core.setFailed)('A propriedade `payload` não foi encontrada!')
+            (0,core.setFailed)('A propriedade `payload` não foi encontrada!')
             return false
         }
         
         if(!Object.hasOwnProperty.bind(github.context.payload)('repository')){
-            (0,lib_core.setFailed)('A propriedade `repository` não foi encontrada!')
+            (0,core.setFailed)('A propriedade `repository` não foi encontrada!')
             return false
         }
         
         if(!Object.hasOwnProperty.bind(github.context.payload.repository)('owner')){
-            (0,lib_core.setFailed)('A propriedade `owner` não foi encontrada!')
+            (0,core.setFailed)('A propriedade `owner` não foi encontrada!')
             return false
         }
         
         if(!Object.hasOwnProperty.bind(github.context.payload.repository)('name')){
-            (0,lib_core.setFailed)('A propriedade `name` não foi encontrada!')
+            (0,core.setFailed)('A propriedade `name` não foi encontrada!')
             return false
         }
         
         if(!Object.hasOwnProperty.bind(github.context.payload.repository.owner)('login')){
-            (0,lib_core.setFailed)('A propriedade `login` não foi encontrada!')
+            (0,core.setFailed)('A propriedade `login` não foi encontrada!')
             return false
         }
         
         if(!Object.hasOwnProperty.bind(github.context.payload.pull_request)('head')){
-            (0,lib_core.setFailed)('A propriedade `head` não foi encontrada!')
+            (0,core.setFailed)('A propriedade `head` não foi encontrada!')
             return false
         }
         
         if(!Object.hasOwnProperty.bind(github.context.payload.pull_request.head)('repo')){
-            (0,lib_core.setFailed)('A propriedade `repo` não foi encontrada!')
+            (0,core.setFailed)('A propriedade `repo` não foi encontrada!')
             return false
         }
         
         if(!Object.hasOwnProperty.bind(github.context.payload.pull_request.head.repo)('owner')){
-            (0,lib_core.setFailed)('A propriedade `owner` não foi encontrada!')
+            (0,core.setFailed)('A propriedade `owner` não foi encontrada!')
             return false
         }
 
@@ -14160,16 +14171,15 @@ class Jira {
                       Authorization: this.basic_auth,
                     }
             
-            }).then((res) => {
+            }).then(() => {
                 console.log("Issue válida!")
                 this.verifyJiraIssue = true
-                return true
             })
             
             this.verifyJiraIssue = false
             return false
         }catch(error){
-            (0,lib_core.setFailed)("Issue não encontrada")
+            (0,core.setFailed)("Issue não encontrada")
         }   
         
     }
@@ -14195,16 +14205,17 @@ class Jira {
             }
         }
         
-        if(this.verifyJiraIssue)
+        if(this.verifyJiraIssue){
             return false
+        }
 
         try {
-            await axios.post(url_gmud, body,headers).then((res) => {
+            await axios.post(url_gmud, body,headers).then(() => {
                 console.log("A GMUD foi criada!")
             })
         } catch (error) {
-            (0,lib_core.setFailed)("Erro ao criar GMUD!")
-            ;(0,lib_core.setFailed)(error.response.data.message)
+            (0,core.setFailed)("Erro ao criar GMUD!")
+            ;(0,core.setFailed)(error.response.data.message)
         }
     }
 }
@@ -14228,7 +14239,7 @@ class GithubService {
             owner: this.github.context.payload.repository.owner.login,
             repo: this.github.context.payload.repository.name,
             run_id: runId
-        }).then((res) => {
+        }).then(() => {
             console.log(`Run ${runId} deletado com sucesso!`)
         }).catch((err) => {
             console.log("Erro ao deletar run")
@@ -14260,18 +14271,18 @@ class GithubService {
 ;// CONCATENATED MODULE: ./src/dto/jiraDTO.js
 
 let jiraDTO ={
-    basic_auth: lib_core.getInput('basic-auth'),
-    domain: lib_core.getInput('domain'),
+    basic_auth: core.getInput('basic-auth'),
+    domain: core.getInput('domain'),
     verifyJiraIssue: false,
-    serviceDeskId: lib_core.getInput('service-desk-id'),
-    requestTypeId: lib_core.getInput('request-type-id'),
+    serviceDeskId: core.getInput('service-desk-id'),
+    requestTypeId: core.getInput('request-type-id'),
     idCardIssue: null,
-    technicalApproval: lib_core.getInput('technical-approval'),
-    businessApproval: lib_core.getInput('business-approval'),
-    urlPullRequest:  lib_core.getInput('url-pull-request'),
-    urlServiceDesk:  lib_core.getInput('url-slifer-gmud'),
-    apikey: lib_core.getInput('api-key'),
-    authGithub: lib_core.getInput('auth-github')
+    technicalApproval: core.getInput('technical-approval'),
+    businessApproval: core.getInput('business-approval'),
+    urlPullRequest:  core.getInput('url-pull-request'),
+    urlServiceDesk:  core.getInput('url-slifer-gmud'),
+    apikey: core.getInput('api-key'),
+    authGithub: core.getInput('auth-github')
 }
 
 /* harmony default export */ const dto_jiraDTO = (jiraDTO);
@@ -14279,6 +14290,7 @@ let jiraDTO ={
 ;// CONCATENATED MODULE: ./src/controllers/actionController.js
 
 ;
+
 
 
 
@@ -14292,8 +14304,9 @@ class ActionController{
         
         let validate = new Validate(this.github)
 
-        if(validate.isBot())      
+        if(validate.isBot()){
             return
+        }
        
         let authGithub = dto_jiraDTO.authGithub
         let githubService = new GithubService(authGithub, this.github)
@@ -14313,7 +14326,7 @@ class ActionController{
             console.log("Hotfix, não será criada a GMUD.")
             return
         } else {
-            core.setFailed('ERRO. Título da Pull Request não está no padrão.\ntipoPR(IDJIRA): Descrição.')
+            (0,core.setFailed)('ERRO. Título da Pull Request não está no padrão.\ntipoPR(IDJIRA): Descrição.')
         }
         
     }
@@ -14329,7 +14342,7 @@ async function run() {
         const actionController = new ActionController(github_namespaceObject)
         await actionController.createGMUD()
     } catch (e) {
-        (0,lib_core.setFailed)(`Essa ação só será executada em uma Pull Request.\nERRO: ${e}.`)
+        (0,core.setFailed)(`Essa ação só será executada em uma Pull Request.\nERRO: ${e}.`)
     }
 }
 

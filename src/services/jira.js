@@ -27,10 +27,9 @@ export default class Jira {
                       Authorization: this.basic_auth,
                     }
             
-            }).then((res) => {
+            }).then(() => {
                 console.log("Issue válida!")
                 this.verifyJiraIssue = true
-                return true
             })
             
             this.verifyJiraIssue = false
@@ -62,11 +61,12 @@ export default class Jira {
             }
         }
         
-        if(this.verifyJiraIssue)
+        if(this.verifyJiraIssue){
             return false
+        }
 
         try {
-            await axios.post(url_gmud, body,headers).then((res) => {
+            await axios.post(url_gmud, body,headers).then(() => {
                 console.log("A GMUD foi criada!")
             })
         } catch (error) {
