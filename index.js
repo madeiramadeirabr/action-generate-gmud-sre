@@ -2,7 +2,6 @@
 const github = require('@actions/github');
 import { setFailed } from '@actions/core';
 import ActionController from './src/controllers/actionController.js';
-import Validate from './src/services/validate.js';
 
 async function run() {
     try {        
