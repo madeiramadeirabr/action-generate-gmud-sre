@@ -10,17 +10,17 @@ export default class ActionController{
         this.github = github
     }
     async createGMUD(){
-        let validate = new Validate(github)
+        
+        let validate = new Validate(this.github)
 
         if(validate.isBot())      
             return
-
+       
         let authGithub = jiraDTO.authGithub
         let githubService = new GithubService(authGithub, this.github)
 
         const runId = this.github.context.runId
         await githubService.getRunAll(runId)
-
         let titlePR = this.github.context.payload.pull_request.title
         
         if (validate.isPRDefault(titlePR)) {
