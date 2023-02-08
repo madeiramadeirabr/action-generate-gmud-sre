@@ -4,7 +4,8 @@ import { setFailed } from '@actions/core';
 import ActionController from './src/controllers/actionController.js';
 
 async function run() {
-    try {        
+    try {       
+        console.log('print: ' + github)
         const actionController = new ActionController(github)
         await actionController.createGMUD()
     } catch (e) {

@@ -1,4 +1,4 @@
-import core from '@actions/core'
+import * as core from '@actions/core'
 let jiraDTO ={
     basic_auth: core.getInput('basic-auth'),
     domain: core.getInput('domain'),
