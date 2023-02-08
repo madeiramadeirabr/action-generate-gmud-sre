@@ -61,11 +61,9 @@ export default class Jira {
                 'Content-Type': 'application/json'
             }
         }
-
         
         if(this.verifyJiraIssue)
             return false
-
 
         try {
             await axios.post(url_gmud, body,headers).then((res) => {

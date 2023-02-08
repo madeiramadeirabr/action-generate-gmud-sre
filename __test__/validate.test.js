@@ -6,12 +6,24 @@ test('Validates if github object has all required properties', ()=>{
     const github= {
         context: {
             payload:{
+                pull_request: {
+                    title: 'teste',
+                    head:{
+                        repo:{
+                            owner: 'teste'
+                        }
+                    }
+                },
                 repository: {
                     name:'teste',
                     owner:{
                         login: 'teste'
                     }
-                }
+                },
+                sender: {
+                    login: 'teste'
+                }, 
+                number: 34
             }
         }
     }

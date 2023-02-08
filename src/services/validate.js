@@ -102,18 +102,18 @@ export default class Validate {
             setFailed('A propriedade `login` não foi encontrada!')
             return false
         }
-
-        if(!github.context.payload.repository.hasOwnProperty('head')){
+        
+        if(!github.context.payload.pull_request.hasOwnProperty('head')){
             setFailed('A propriedade `head` não foi encontrada!')
             return false
         }
         
-        if(!github.context.payload.repository.head.hasOwnProperty('repo')){
+        if(!github.context.payload.pull_request.head.hasOwnProperty('repo')){
             setFailed('A propriedade `repo` não foi encontrada!')
             return false
         }
         
-        if(!github.context.payload.repository.head.repo.hasOwnProperty('owner')){
+        if(!github.context.payload.pull_request.head.repo.hasOwnProperty('owner')){
             setFailed('A propriedade `owner` não foi encontrada!')
             return false
         }
