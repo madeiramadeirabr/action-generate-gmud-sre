@@ -70,7 +70,7 @@ export default class Jira {
                 console.log("A GMUD foi criada!")
             })
         } catch (error) {
-            setFailed("Erro ao criar GMUD")
+            setFailed("Erro ao criar GMUD!")
             setFailed(error.response.data.message)
         }
     }
