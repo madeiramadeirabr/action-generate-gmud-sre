@@ -9,7 +9,7 @@ let jiraDTO ={
     technicalApproval: core.getInput('technical-approval'),
     businessApproval: core.getInput('business-approval'),
     urlPullRequest:  core.getInput('url-pull-request'),
-    urlServiceDesk:  core.getInput('url-service-desk'),
+    urlServiceDesk:  core.getInput('url-slifer-gmud'),
     apikey: core.getInput('api-key'),
     authGithub: core.getInput('auth-github')
 }
