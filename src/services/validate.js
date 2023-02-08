@@ -12,7 +12,7 @@ export default class Validate {
     }
 
     isHotfix(titlePR) {
-        let PRHotFix = /\(hotfix\)+\:.*/
+        let PRHotFix = /\(hotfix\)+:.*/
         return PRHotFix.test(titlePR)
     }
 
