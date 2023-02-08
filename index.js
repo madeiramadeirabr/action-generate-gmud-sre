@@ -58,9 +58,10 @@ async function verifyJiraIssue(url, basic_auth){
     
     }).then((res) => {
         console.log("Issue válida!")
-        return true
+        this.verifyJiraIssue = true
     }).catch((err) => {
         console.log(err)
+        this.verifyJiraIssue = false
         core.setFailed("Issue não encontrada")
     })
 }
@@ -75,6 +76,9 @@ async function createGMUD(){
         business_approval: core.getInput('business-approval'),
         url:  core.getInput('url-pull-request')
     }
+
+    if(!this.verifyJiraIssue)
+        return false
 
     try {
         await axios.post(url_gmud, body,
