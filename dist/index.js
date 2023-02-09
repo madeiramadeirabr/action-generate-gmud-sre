@@ -14201,7 +14201,7 @@ class Jira {
                 'Content-Type': 'application/json'
             }
         }
-        console.log("issue é válida? "+this.verifyJiraIssue)
+        
         if(!this.verifyJiraIssue){
             return false
         }
