@@ -20,21 +20,18 @@ export default class Jira {
 
     async  issueExists(idIssue){
         try{
-            let url = `https://${this.domain}.atlassian.net/rest/api/3/issue/${idIssue}`
-            await axios.get(url,
-                {
-                    headers: {
-                      Authorization: this.basic_auth,
-                    }
-            
-            }).then(() => {
-                console.log("Issue válida!")
-                this.verifyJiraIssue = true
+            const url = `https://${this.domain}.atlassian.net/rest/api/3/issue/${idIssue}`
+            await axios.get(url,{
+                headers: {
+                    Authorization: this.basic_auth,
+                }
             })
+
+            console.log("Issue válida!")
+            this.verifyJiraIssue = true
             
-            this.verifyJiraIssue = false
-            return false
         }catch(error){
+            this.verifyJiraIssue = false
             setFailed("Issue não encontrada")
         }   
         
@@ -61,14 +58,17 @@ export default class Jira {
             }
         }
         
-        if(this.verifyJiraIssue){
+        if(!this.verifyJiraIssue){
             return false
         }
 
         try {
-            await axios.post(url_gmud, body,headers).then(() => {
-                console.log("A GMUD foi criada!")
-            })
+            const response = await axios.post(url_gmud, body,headers)
+            if(response.status != 201 && response.status!= 200){
+                setFailed("Erro ao criar GMUD! \n Verifique se suas credenciais e URLs estão corretas!")
+                return    
+            }
+            console.log("A GMUD foi criada! ")
         } catch (error) {
             setFailed("Erro ao criar GMUD!")
             setFailed(error.response.data.message)
