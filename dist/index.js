@@ -14165,21 +14165,18 @@ class Jira {
     async  issueExists(idIssue){
         try{
             let url = `https://${this.domain}.atlassian.net/rest/api/3/issue/${idIssue}`
-            await axios.get(url,
-                {
-                    headers: {
-                      Authorization: this.basic_auth,
-                    }
-            
-            }).then(() => {
-                console.log("Issue válida!")
-                this.verifyJiraIssue = true
+            await axios.get(url,{
+                headers: {
+                    Authorization: this.basic_auth,
+                }
             })
+
+            console.log("Issue válida!")
+            this.verifyJiraIssue = true
             
-            this.verifyJiraIssue = false
-            return false
         }catch(error){
-            (0,core.setFailed)("Issue não encontrada")
+            this.verifyJiraIssue = false
+            ;(0,core.setFailed)("Issue não encontrada")
         }   
         
     }
@@ -14204,15 +14201,18 @@ class Jira {
                 'Content-Type': 'application/json'
             }
         }
-        
-        if(this.verifyJiraIssue){
+        console.log("issue é válida? "+this.verifyJiraIssue)
+        if(!this.verifyJiraIssue){
             return false
         }
 
         try {
-            await axios.post(url_gmud, body,headers).then(() => {
-                console.log("A GMUD foi criada!")
-            })
+            let response = await axios.post(url_gmud, body,headers)
+            if(response.status != 201){
+                (0,core.setFailed)("Erro ao criar GMUD! \n Verifique se suas credenciais e URLs estão corretas!")
+                return    
+            }
+            console.log("A GMUD foi criada! ")
         } catch (error) {
             (0,core.setFailed)("Erro ao criar GMUD!")
             ;(0,core.setFailed)(error.response.data.message)
@@ -14234,37 +14234,41 @@ class GithubService {
     }
     
     async deleteRunById(runId){
+        try{
+            await this.octokit.request('DELETE /repos/{owner}/{repo}/actions/runs/{run_id}', {
+                owner: this.github.context.payload.repository.owner.login,
+                repo: this.github.context.payload.repository.name,
+                run_id: runId
+            })
 
-        await this.octokit.request('DELETE /repos/{owner}/{repo}/actions/runs/{run_id}', {
-            owner: this.github.context.payload.repository.owner.login,
-            repo: this.github.context.payload.repository.name,
-            run_id: runId
-        }).then(() => {
             console.log(`Run ${runId} deletado com sucesso!`)
-        }).catch((err) => {
+        }catch(error){
             console.log("Erro ao deletar run")
-            console.log(err.message)
-        })
+            console.log(error.message)
+        }
     }
 
     async getRunAll(runId){
+        try {
         
-        let validate = new Validate(this.github)
-        
-        await this.octokit.request('GET /repos/{owner}/{repo}/actions/runs', {
-            owner: this.github.context.payload.repository.owner.login,
-            repo: this.github.context.payload.repository.name,
-        }).then((res) => {
-            let workflow_runs = res.data.workflow_runs
-            for(let indice in workflow_runs){
-                if(validate.isRunDuplicate(runId, workflow_runs[indice])){
-                    this.deleteRunById(workflow_runs[indice].id)
-                    break
+            const validate = new Validate(this.github)
+            
+            let response =  await this.octokit.request('GET /repos/{owner}/{repo}/actions/runs', {
+                owner: this.github.context.payload.repository.owner.login,
+                repo: this.github.context.payload.repository.name,
+            })
+
+            let workflow_runs = response.data.workflow_runs
+                for(let indice in workflow_runs){
+                    if(validate.isRunDuplicate(runId, workflow_runs[indice])){
+                        this.deleteRunById(workflow_runs[indice].id)
+                        break
+                    }
                 }
-            }
-        }).catch((error)=>{
+
+        }catch(error){
             console.log("Erro ao buscar run: ", error)
-        })
+        }
     }
 
 }
@@ -14308,8 +14312,8 @@ class ActionController{
             return
         }
        
-        let authGithub = dto_jiraDTO.authGithub
-        let githubService = new GithubService(authGithub, this.github)
+        const authGithub = dto_jiraDTO.authGithub
+        const githubService = new GithubService(authGithub, this.github)
 
         const runId = this.github.context.runId
         await githubService.getRunAll(runId)
@@ -14319,7 +14323,7 @@ class ActionController{
             let keyJira = titlePR.split("(").pop().split(")")[0]
             console.log("Título da PR validada!")
             dto_jiraDTO.idCardIssue = keyJira
-            let jira = new Jira(dto_jiraDTO);
+            const jira = new Jira(dto_jiraDTO);
             await jira.issueExists(keyJira)
             await jira.createServiceDesk()
         }else if(validate.isHotfix(titlePR)){

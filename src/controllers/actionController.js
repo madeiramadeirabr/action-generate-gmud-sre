@@ -18,8 +18,8 @@ export default class ActionController{
             return
         }
        
-        let authGithub = jiraDTO.authGithub
-        let githubService = new GithubService(authGithub, this.github)
+        const authGithub = jiraDTO.authGithub
+        const githubService = new GithubService(authGithub, this.github)
 
         const runId = this.github.context.runId
         await githubService.getRunAll(runId)
@@ -29,7 +29,7 @@ export default class ActionController{
             let keyJira = titlePR.split("(").pop().split(")")[0]
             console.log("Título da PR validada!")
             jiraDTO.idCardIssue = keyJira
-            let jira = new Jira(jiraDTO);
+            const jira = new Jira(jiraDTO);
             await jira.issueExists(keyJira)
             await jira.createServiceDesk()
         }else if(validate.isHotfix(titlePR)){
