@@ -20,7 +20,7 @@ export default class Jira {
 
     async  issueExists(idIssue){
         try{
-            let url = `https://${this.domain}.atlassian.net/rest/api/3/issue/${idIssue}`
+            const url = `https://${this.domain}.atlassian.net/rest/api/3/issue/${idIssue}`
             await axios.get(url,{
                 headers: {
                     Authorization: this.basic_auth,
@@ -57,14 +57,14 @@ export default class Jira {
                 'Content-Type': 'application/json'
             }
         }
-        console.log("issue é válida? "+this.verifyJiraIssue)
+        
         if(!this.verifyJiraIssue){
             return false
         }
 
         try {
-            let response = await axios.post(url_gmud, body,headers)
-            if(response.status != 201){
+            const response = await axios.post(url_gmud, body,headers)
+            if(response.status != 201 || response.status!= 200){
                 setFailed("Erro ao criar GMUD! \n Verifique se suas credenciais e URLs estão corretas!")
                 return    
             }

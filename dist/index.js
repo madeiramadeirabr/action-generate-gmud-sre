@@ -14164,7 +14164,7 @@ class Jira {
 
     async  issueExists(idIssue){
         try{
-            let url = `https://${this.domain}.atlassian.net/rest/api/3/issue/${idIssue}`
+            const url = `https://${this.domain}.atlassian.net/rest/api/3/issue/${idIssue}`
             await axios.get(url,{
                 headers: {
                     Authorization: this.basic_auth,
@@ -14201,14 +14201,14 @@ class Jira {
                 'Content-Type': 'application/json'
             }
         }
-        console.log("issue é válida? "+this.verifyJiraIssue)
+        
         if(!this.verifyJiraIssue){
             return false
         }
 
         try {
-            let response = await axios.post(url_gmud, body,headers)
-            if(response.status != 201){
+            const response = await axios.post(url_gmud, body,headers)
+            if(response.status != 201 || response.status!= 200){
                 (0,core.setFailed)("Erro ao criar GMUD! \n Verifique se suas credenciais e URLs estão corretas!")
                 return    
             }
@@ -14253,7 +14253,7 @@ class GithubService {
         
             const validate = new Validate(this.github)
             
-            let response =  await this.octokit.request('GET /repos/{owner}/{repo}/actions/runs', {
+            const response =  await this.octokit.request('GET /repos/{owner}/{repo}/actions/runs', {
                 owner: this.github.context.payload.repository.owner.login,
                 repo: this.github.context.payload.repository.name,
             })
