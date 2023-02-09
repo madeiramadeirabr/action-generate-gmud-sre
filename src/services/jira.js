@@ -64,7 +64,7 @@ export default class Jira {
 
         try {
             const response = await axios.post(url_gmud, body,headers)
-            if(response.status != 201 || response.status!= 200){
+            if(response.status != 201 && response.status!= 200){
                 setFailed("Erro ao criar GMUD! \n Verifique se suas credenciais e URLs estão corretas!")
                 return    
             }
