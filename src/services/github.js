@@ -29,7 +29,7 @@ export default class GithubService {
         
             const validate = new Validate(this.github)
             
-            let response =  await this.octokit.request('GET /repos/{owner}/{repo}/actions/runs', {
+            const response =  await this.octokit.request('GET /repos/{owner}/{repo}/actions/runs', {
                 owner: this.github.context.payload.repository.owner.login,
                 repo: this.github.context.payload.repository.name,
             })
