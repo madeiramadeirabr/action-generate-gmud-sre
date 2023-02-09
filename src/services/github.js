@@ -10,37 +10,41 @@ export default class GithubService {
     }
     
     async deleteRunById(runId){
+        try{
+            await this.octokit.request('DELETE /repos/{owner}/{repo}/actions/runs/{run_id}', {
+                owner: this.github.context.payload.repository.owner.login,
+                repo: this.github.context.payload.repository.name,
+                run_id: runId
+            })
 
-        await this.octokit.request('DELETE /repos/{owner}/{repo}/actions/runs/{run_id}', {
-            owner: this.github.context.payload.repository.owner.login,
-            repo: this.github.context.payload.repository.name,
-            run_id: runId
-        }).then(() => {
             console.log(`Run ${runId} deletado com sucesso!`)
-        }).catch((err) => {
+        }catch(error){
             console.log("Erro ao deletar run")
-            console.log(err.message)
-        })
+            console.log(error.message)
+        }
     }
 
     async getRunAll(runId){
+        try {
         
-        let validate = new Validate(this.github)
-        
-        await this.octokit.request('GET /repos/{owner}/{repo}/actions/runs', {
-            owner: this.github.context.payload.repository.owner.login,
-            repo: this.github.context.payload.repository.name,
-        }).then((res) => {
-            let workflow_runs = res.data.workflow_runs
-            for(let indice in workflow_runs){
-                if(validate.isRunDuplicate(runId, workflow_runs[indice])){
-                    this.deleteRunById(workflow_runs[indice].id)
-                    break
+            const validate = new Validate(this.github)
+            
+            let response =  await this.octokit.request('GET /repos/{owner}/{repo}/actions/runs', {
+                owner: this.github.context.payload.repository.owner.login,
+                repo: this.github.context.payload.repository.name,
+            })
+
+            let workflow_runs = response.data.workflow_runs
+                for(let indice in workflow_runs){
+                    if(validate.isRunDuplicate(runId, workflow_runs[indice])){
+                        this.deleteRunById(workflow_runs[indice].id)
+                        break
+                    }
                 }
-            }
-        }).catch((error)=>{
+
+        }catch(error){
             console.log("Erro ao buscar run: ", error)
-        })
+        }
     }
 
 }
