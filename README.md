@@ -2,6 +2,13 @@
 
 # action-generate-gmud-sre
 
+## How to build
+```
+npm install -g @vercel/ncc
+npm install
+ncc build index.js -o dist
+```
+
 ## Descrição:
 Action que valida:
 - Título de Pull Request
