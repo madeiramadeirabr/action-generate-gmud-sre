@@ -45,6 +45,7 @@ export default class Validate {
     
         if (loginSender.includes("[bot]")){
             setFailed(`Essa ação foi executada pelo bot ${loginSender} e não irá gerar GMUD!`)
+            
             return true
         }
         
